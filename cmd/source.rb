@@ -26,11 +26,13 @@ module Homebrew
   def source
     args = source_args.parse
     
-    formula = args.named.first
+    # look up the specified formula(e)
+    formula_name = args.named.first
+    formula = Formulary.factory(formula_name)
 
-    puts "Checking that formula #{formula} contains shell functions... ok"
+    puts "Checking that formula '#{formula}' contains shell functions... ok"
 
-    puts "Adding 'source' directive for #{formula} to your #{shell_profile}..."
+    puts "Adding 'source' directive for the formula '#{formula}' to your #{shell_profile}..."
 
     puts "Zsh site-functions: #{formula.zsh_function}"
   end
