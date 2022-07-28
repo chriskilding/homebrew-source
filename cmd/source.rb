@@ -23,10 +23,12 @@ module Homebrew
 
   sig { void }
   def source
-    puts 'hello'
-    
     args = source_args.parse
     
-    something if args.force?
+    puts 'Running subcommand: brew source'
+
+    puts "Shell profile: #{shell_profile}"
+
+    puts "Zsh site-functions: #{zsh_function}"
   end
 end
