@@ -15,9 +15,8 @@ module Homebrew
       description <<~EOS
         Automatically 'source' shell functions from formulae in your shell profile
       EOS
-      switch "-f", "--force",
-             description: "Force doing something in the command."
 
+      # TODO support multiple formulae in one go
       named_args [:formula], min: 1, max: 1
     end
   end
@@ -26,7 +25,6 @@ module Homebrew
   def source
     args = source_args.parse
     
-    # look up the specified formula(e)
     formula_name = args.named.first
     formula = Formulary.factory(formula_name)
 
@@ -36,7 +34,7 @@ module Homebrew
     file_to_source = "#{formula.zsh_function}/#{formula}"
 
     unless file_to_source
-      puts "...this formula does not contain shell functions, so no action is required."
+      puts "...this formula does not contain shell functions, so no action was taken."
       return
     end
 
@@ -46,19 +44,22 @@ module Homebrew
 
     File.open(shell_profile_path, 'r') do |file|
       file.each do |line|
+        # TODO make this logic more robust
         if line["source #{file_to_source}"]
-          puts "...this formula's shell functions are already sourced, so no action was taken."
           is_sourced = true
           break
         end
       end
     end
 
-    unless is_sourced
-      File.open(shell_profile_path, 'a') do |file|
-        file.write("source #{file_to_source}")
-        puts "...done."
-      end
+    if is_sourced
+      puts "...this formula's shell functions are already sourced, so no action was taken."
+      return
+    end
+
+    File.open(shell_profile_path, 'a') do |file|
+      file.write("source #{file_to_source}\n")
+      puts "...done."
     end
   end
 end
