@@ -30,9 +30,25 @@ module Homebrew
     formula_name = args.named.first
     formula = Formulary.factory(formula_name)
 
-    puts "Checking that formula '#{formula}' contains shell functions... ok"
-
     puts "Adding 'source' directive for the formula '#{formula}' to your #{shell_profile}..."
+
+    File.open(shell_profile, 'r') do |file|
+      is_sourced = false
+
+      file.each do |line|
+        if line["source #{formula.zsh_function}"]
+          puts "...this formula's zsh functions are already sourced, so no action was taken."
+          is_sourced = true
+          break
+        end
+      end
+
+      unless is_sourced
+        puts "Not yet sourced, adding the directive..."
+      end
+    end
+
+    puts "Checking that formula '#{formula}' contains shell functions... ok"
 
     puts "Zsh site-functions: #{formula.zsh_function}"
   end
