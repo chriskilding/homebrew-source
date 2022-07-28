@@ -30,7 +30,7 @@ module Homebrew
     formula_name = args.named.first
     formula = Formulary.factory(formula_name)
 
-    puts "Adding 'source' directive for the formula '#{formula}' to your #{shell_profile}..."
+    puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
     # TODO get this from the formula definition
     file_to_source = "#{formula.zsh_function}/#{formula}"
@@ -56,7 +56,7 @@ module Homebrew
 
     unless is_sourced
       File.open(shell_profile_path, 'a') do |file|
-        #file.puts("source #{file_to_source}")
+        file.write("source #{file_to_source}")
         puts "...done."
       end
     end
