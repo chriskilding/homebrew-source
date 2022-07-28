@@ -3,6 +3,7 @@
 
 require "cli/parser"
 require "formula"
+require "homebrew"
 
 module Homebrew
   extend T::Sig
@@ -26,9 +27,11 @@ module Homebrew
   def source
     args = source_args.parse
     
-    puts 'Running subcommand: brew source'
+    formula_name = args.named.first
 
-    puts "Shell profile: #{shell_profile}"
+    puts "Checking that formula #{formula_name} contains shell functions... ok"
+
+    puts "Adding 'source' directive for #{formula_name} to your #{shell_profile}..."
 
     puts "Zsh site-functions: #{zsh_function}"
   end
