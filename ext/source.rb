@@ -20,7 +20,7 @@ module Homebrew
   end
 
   def source
-    args = foo_args.parse
+    args = source_args.parse
 
     something if args.force?
     something_else if args.file == "file.txt"
