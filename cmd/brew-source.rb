@@ -3,26 +3,23 @@
 module Homebrew
   module_function
 
-  def foo_args
+  def source_args
     Homebrew::CLI::Parser.new do
       description <<~EOS
         Automatically 'source' shell functions from formulae in your shell profile
       EOS
       switch "-f", "--force",
              description: "Force doing something in the command."
-      flag   "--file=",
-             description: "Specify a file to do something with in the command."
-      comma_array "--names",
-                  description: "Add a list of names to the command."
 
-      named_args [:formula, :cask], min: 1
+      named_args [:formula], min: 1, max: 1
     end
   end
 
-  def foo
-    args = foo_args.parse
+  def source
+    args = source_args.parse
 
+    puts 'hello'
+    
     something if args.force?
-    something_else if args.file == "file.txt"
   end
 end
