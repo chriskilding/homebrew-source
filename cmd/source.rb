@@ -31,7 +31,7 @@ module Homebrew
     puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
     # TODO get this from the formula definition
-    file_to_source = "#{formula.zsh_function}/#{formula}"
+    file_to_source = "/usr/local/share/zsh/site-functions/#{formula}"
 
     unless file_to_source
       puts "...this formula does not contain shell functions, so no action was taken."
