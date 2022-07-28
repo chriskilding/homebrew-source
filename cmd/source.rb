@@ -32,12 +32,17 @@ module Homebrew
 
     puts "Adding 'source' directive for the formula '#{formula}' to your #{shell_profile}..."
 
-    File.open(shell_profile, 'r') do |file|
+    # TODO get this from the formula definition
+    file_to_source = "#{formula.zsh_function}/#{formula}"
+
+    shell_profile_path = File.expand_path(shell_profile)
+
+    File.open(shell_profile_path, 'r') do |file|
       is_sourced = false
 
       file.each do |line|
-        if line["source #{formula.zsh_function}"]
-          puts "...this formula's zsh functions are already sourced, so no action was taken."
+        if line["source #{file_to_source}"]
+          puts "...this formula's shell functions are already sourced, so no action was taken."
           is_sourced = true
           break
         end
