@@ -3,7 +3,7 @@
 module Homebrew
   module_function
 
-  def source_args
+  def foo_args
     Homebrew::CLI::Parser.new do
       description <<~EOS
         Automatically 'source' shell functions from formulae in your shell profile
@@ -19,8 +19,8 @@ module Homebrew
     end
   end
 
-  def source
-    args = source_args.parse
+  def foo
+    args = foo_args.parse
 
     something if args.force?
     something_else if args.file == "file.txt"
