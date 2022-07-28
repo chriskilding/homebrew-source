@@ -35,11 +35,16 @@ module Homebrew
     # TODO get this from the formula definition
     file_to_source = "#{formula.zsh_function}/#{formula}"
 
+    unless file_to_source
+      puts "...this formula does not contain shell functions, so no action is required."
+      return
+    end
+
     shell_profile_path = File.expand_path(shell_profile)
 
-    File.open(shell_profile_path, 'r') do |file|
-      is_sourced = false
+    is_sourced = false
 
+    File.open(shell_profile_path, 'r') do |file|
       file.each do |line|
         if line["source #{file_to_source}"]
           puts "...this formula's shell functions are already sourced, so no action was taken."
@@ -47,14 +52,13 @@ module Homebrew
           break
         end
       end
-
-      unless is_sourced
-        puts "Not yet sourced, adding the directive..."
-      end
     end
 
-    puts "Checking that formula '#{formula}' contains shell functions... ok"
-
-    puts "Zsh site-functions: #{formula.zsh_function}"
+    unless is_sourced
+      File.open(shell_profile_path, 'a') do |file|
+        #file.puts("source #{file_to_source}")
+        puts "...done."
+      end
+    end
   end
 end
