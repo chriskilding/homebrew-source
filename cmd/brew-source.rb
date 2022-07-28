@@ -1,8 +1,11 @@
 # frozen_string_literal: true
 
 module Homebrew
+  extend T::Sig
+  
   module_function
 
+  sig { returns(CLI::Parser) }
   def source_args
     Homebrew::CLI::Parser.new do
       description <<~EOS
@@ -15,10 +18,11 @@ module Homebrew
     end
   end
 
+  sig { void }
   def source
-    args = source_args.parse
-
     puts 'hello'
+    
+    args = source_args.parse
     
     something if args.force?
   end
