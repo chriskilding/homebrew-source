@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require "cli/parser"
+require "formula"
 
 module Homebrew
   extend T::Sig
