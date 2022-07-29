@@ -7,6 +7,13 @@ require "formula"
 module Homebrew
     extend T::Sig
 
+    # Patch what we want onto the brew Formula API
+    class Formula
+        def foo
+            "abc"
+        end
+    end
+
     module_function
 
     sig { returns(CLI::Parser) }
@@ -28,11 +35,12 @@ module Homebrew
         require_relative "../lib/source"
 
         formula_name = args.named.first
-        formula = Formulary.factory(formula_name)
+        formula = Formulary.resolve(formula_name)
 
         puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
         # FIXME read from the formula
+        something = formula.foo
         files_to_source = [
             "/usr/local/share/zsh/site-functions/#{formula.name}",
             "/usr/local/share/zsh/site-functions/#{formula.name}-foo"
@@ -46,7 +54,7 @@ module Homebrew
         shell_profile_path = File.expand_path(shell_profile)
 
         unsourced_files = []
-        
+
         File.open(shell_profile_path, 'r') do |file|
             rc = Source::ShellProfile.new(file)
             unsourced_files = rc.unsourced_files(*files_to_source)
