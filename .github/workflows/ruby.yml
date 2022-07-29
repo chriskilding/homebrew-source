@@ -1,0 +1,22 @@
+name: Ruby
+
+on: [push, pull_request]
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Ruby
+    - uses: ruby/setup-ruby@v1
+      with:
+        ruby-version: '2.6'    # what the latest stable macOS uses
+        bundler-cache: true
+    - name: Run tests
+      run: bundle exec rspec
