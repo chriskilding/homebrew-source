@@ -45,6 +45,8 @@ module Homebrew
 
         shell_profile_path = File.expand_path(shell_profile)
 
+        unsourced_files = []
+        
         File.open(shell_profile_path, 'r') do |file|
             rc = Source::ShellProfile.new(file)
             unsourced_files = rc.unsourced_files(*files_to_source)
