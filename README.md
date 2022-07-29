@@ -18,11 +18,11 @@ Without this Brew extension, you'd have to read the caveats section after instal
 source /usr/local/share/zsh/site-functions/<foo>
 ```
 
-And if formula author forgot to note this in the caveats, you'd have to rely on guesswork.
+And if the formula author forgot to note this in the caveats, you'd have to rely on guesswork.
 
 ### With `brew source`
 
-Now to install and link a formula with shell functions, you need simply run:
+To install and source a formula with shell functions, you need simply run:
 
 ```bash
 brew install <foo>

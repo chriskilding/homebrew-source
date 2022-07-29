@@ -30,36 +30,44 @@ module Homebrew
 
     puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
-    # TODO get this from the formula definition
-    file_to_source = "/usr/local/share/zsh/site-functions/#{formula}"
+    files_to_source = formula.files_to_source.to_set
 
-    unless file_to_source
+    if files_to_source.empty?
       puts "...this formula does not contain shell functions, so no action was taken."
       return
     end
 
     shell_profile_path = File.expand_path(shell_profile)
 
-    is_sourced = false
-
     File.open(shell_profile_path, 'r') do |file|
       file.each do |line|
         # TODO make this logic more robust
-        if line["source #{file_to_source}"]
-          is_sourced = true
-          break
+        files_to_source.each do |file_to_source|
+          if line["source #{file_to_source}"]
+            files_to_source.delete file_to_source
+          end
         end
       end
     end
 
-    if is_sourced
+    if files_to_source.empty?
       puts "...this formula's shell functions are already sourced, so no action was taken."
       return
     end
 
     File.open(shell_profile_path, 'a') do |file|
-      file.write("source #{file_to_source}\n")
+      files_to_source.each do |file_to_source|
+        file.write("source #{file_to_source}\n")
+      end
+
       puts "...done."
+    end
+  end
+
+  # Patch the desired properties onto Formula to indicate the API we would like
+  class Formula
+    def files_to_source
+      ["/usr/local/share/zsh/site-functions/#{name}"]
     end
   end
 end
