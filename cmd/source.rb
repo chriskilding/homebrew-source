@@ -3,7 +3,6 @@
 
 require "cli/parser"
 require "formula"
-require_relative "../lib/shell_profile"
 
 module Homebrew
   extend T::Sig
@@ -17,7 +16,6 @@ module Homebrew
         Automatically 'source' shell functions from formulae in your shell profile
       EOS
 
-      # TODO support multiple formulae in one go
       named_args [:formula], min: 1, max: 1
     end
   end
@@ -26,12 +24,15 @@ module Homebrew
   def source
     args = source_args.parse
     
+    # Keep this after the .parse to keep --help fast.
+    require_relative "../lib/source"
+
     formula_name = args.named.first
     formula = Formulary.factory(formula_name)
 
     puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
-    # TODO read from the formula
+    # FIXME read from the formula
     files_to_source = [
       "/usr/local/share/zsh/site-functions/#{formula.name}",
       "/usr/local/share/zsh/site-functions/#{formula.name}-foo"
@@ -47,7 +48,7 @@ module Homebrew
     File.open(shell_profile_path, 'r') do |file|
       file.each do |line|
         files_to_source.each do |file_to_source|
-          if ShellProfile.includes_source_directive?(line, file_to_source)
+          if Source::ShellProfile.includes_source_directive?(line, file_to_source)
             files_to_source.delete file_to_source
           end
         end

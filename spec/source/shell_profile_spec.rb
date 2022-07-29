@@ -1,12 +1,11 @@
 require "spec_helper"
 require "rspec/expectations"
-require_relative "../lib/shell_profile"
 
 RSpec::Matchers.define :include_source_directive_for do |expected|
     match do |actual|
         # expected = the path to source
         # actual = the rc file
-        ShellProfile.includes_source_directive?(actual, expected)
+        Source::ShellProfile.includes_source_directive?(actual, expected)
     end
     failure_message do |actual|
         "expected that the rc file '#{actual}' would include a source directive for '#{expected}', but it did not"
@@ -17,14 +16,14 @@ RSpec::Matchers.define :exclude_source_directive_for do |expected|
     match do |actual|
         # expected = the path to source
         # actual = the rc file
-        !ShellProfile.includes_source_directive?(actual, expected)
+        !Source::ShellProfile.includes_source_directive?(actual, expected)
     end
     failure_message do |actual|
         "expected that the rc file '#{actual}' would NOT include a source directive for '#{expected}', but it did"
     end
 end
 
-describe ShellProfile do
+describe Source::ShellProfile do
 
     describe "includes_source_directive" do
 
