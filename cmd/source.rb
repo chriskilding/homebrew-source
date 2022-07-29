@@ -37,6 +37,9 @@ module Homebrew
         formula_name = args.named.first
         formula = Formulary.resolve(formula_name)
 
+        puts "interactive shell: #{interactive_shell}"
+        puts "preferred shell: #{preferred_shell}"
+
         puts formula.path
         puts formula.methods
 
