@@ -44,22 +44,23 @@ module Homebrew
         end
 
         shell_profile_path = File.expand_path(shell_profile)
-        missing_directives = []
+
         File.open(shell_profile_path, 'r') do |file|
-            missing_directives = Source::ShellProfile.missing_source_directives(file, files_to_source)
+            rc = Source::ShellProfile.new(file)
+            unsourced_files = rc.unsourced_files(files_to_source)
         end
 
-        if missing_directives.empty?
+        if unsourced_files.empty?
             puts "...this formula's shell functions are already sourced, so no action was taken."
             return
         end
 
         File.open(shell_profile_path, 'a') do |file|
-            missing_directives.each do |file_to_source|
-                file.write("source #{file_to_source}\n")
+            unsourced_files.each do |file_to_source|
+                file.write(". #{file_to_source}\n")
             end
         end
-        
+
         puts "...done."
     end
 end
