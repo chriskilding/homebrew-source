@@ -30,8 +30,10 @@ module Homebrew
 
     puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
+    # TODO read from the formula
     files_to_source = [
-      "/usr/local/share/zsh/site-functions/#{formula.name}"
+      "/usr/local/share/zsh/site-functions/#{formula.name}",
+      "/usr/local/share/zsh/site-functions/#{formula.name}-foo"
     ]
 
     if files_to_source.empty?
@@ -59,7 +61,7 @@ module Homebrew
 
     File.open(shell_profile_path, 'a') do |file|
       files_to_source.each do |file_to_source|
-        file.write("source #{file_to_source}\n")
+        file.write("\nsource #{file_to_source}")
       end
 
       puts "...done."
