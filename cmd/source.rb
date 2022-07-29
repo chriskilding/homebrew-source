@@ -30,7 +30,9 @@ module Homebrew
 
     puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
-    files_to_source = formula.files_to_source.to_set
+    files_to_source = [
+      "/usr/local/share/zsh/site-functions/#{formula.name}"
+    ]
 
     if files_to_source.empty?
       puts "...this formula does not contain shell functions, so no action was taken."
@@ -61,13 +63,6 @@ module Homebrew
       end
 
       puts "...done."
-    end
-  end
-
-  # Patch the desired properties onto Formula to indicate the API we would like
-  class Formula
-    def files_to_source
-      ["/usr/local/share/zsh/site-functions/#{name}"]
     end
   end
 end
