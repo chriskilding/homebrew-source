@@ -37,6 +37,8 @@ module Homebrew
         formula_name = args.named.first
         formula = Formulary.resolve(formula_name)
 
+        puts formula.inspect
+
         puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
         # FIXME read from the formula
