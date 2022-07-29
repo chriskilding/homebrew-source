@@ -30,3 +30,19 @@ brew source <foo>
 ```
 
 And Brew will take care of adding the `source` directive to your shell profile automatically.
+
+## Development
+
+To work on `brew source` itself, follow these instructions.
+
+Setup:
+
+```bash
+bundle install
+```
+
+Run tests:
+
+```bash
+bundle exec rspec
+```

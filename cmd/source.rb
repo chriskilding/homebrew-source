@@ -3,6 +3,7 @@
 
 require "cli/parser"
 require "formula"
+require_relative "../lib/shell_profile"
 
 module Homebrew
   extend T::Sig
@@ -45,9 +46,8 @@ module Homebrew
 
     File.open(shell_profile_path, 'r') do |file|
       file.each do |line|
-        # TODO make this logic more robust
         files_to_source.each do |file_to_source|
-          if line["source #{file_to_source}"]
+          if ShellProfile.includes_source_directive?(line, file_to_source)
             files_to_source.delete file_to_source
           end
         end
@@ -61,7 +61,7 @@ module Homebrew
 
     File.open(shell_profile_path, 'a') do |file|
       files_to_source.each do |file_to_source|
-        file.write("\nsource #{file_to_source}")
+        file.write("source #{file_to_source}\n")
       end
 
       puts "...done."
