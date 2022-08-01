@@ -54,9 +54,8 @@ module Homebrew
         end
 
         File.open(shell_profile_path, 'a') do |file|
-            unsourced_files.each do |file_to_source|
-                file.write(". #{file_to_source}\n")
-            end
+            rc = Source::ShellProfile.new(file)
+            rc.add_source_directives(*unsourced_files)
         end
 
         puts "...done."
@@ -67,8 +66,8 @@ end
 class Formula
     def foo
         [
-            "/usr/local/share/zsh/site-functions/#{formula.name}",
-            "/usr/local/share/zsh/site-functions/#{formula.name}-foo"
+            "/usr/local/share/zsh/site-functions/#{name}",
+            "/usr/local/share/zsh/site-functions/#{name}-foo"
         ]
     end
 end

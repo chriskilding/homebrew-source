@@ -13,12 +13,12 @@ describe Source::ShellProfile do
         end
 
         it "should work with no files to source" do
-            rc = Source::ShellProfile.new()
+            rc = Source::ShellProfile.new([])
             expect(rc.unsourced_files()).to be_empty
         end
 
         it "should report files that are not sourced" do
-            rc = Source::ShellProfile.new()
+            rc = Source::ShellProfile.new([])
             expect(rc.unsourced_files(foo, bar)).to contain_exactly(foo, bar)
         end
 

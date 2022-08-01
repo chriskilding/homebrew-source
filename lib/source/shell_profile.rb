@@ -5,7 +5,9 @@ module Source
     # Support functions for parsing shell profiles (.rc, .bashrc, .zshrc and so on).
     class ShellProfile
 
-        def initialize(content=[])
+        ##
+        # content is expected to be along the lines of a file (a StringIO or string array also work)
+        def initialize(content)
             @content = content
         end
 
@@ -31,6 +33,17 @@ module Source
             end
 
             missing_directives
+        end
+
+        ##
+        # Add 'source' directives for each of the specified files to the shell profile.
+        # Deduplicates the files_to_source before performing any operations.
+        def add_source_directives(*files_to_source)
+            f = files_to_source.to_set
+
+            f.each do |file_to_source|
+                @content.write(". #{file_to_source}\n")
+            end
         end
     end
 end
