@@ -14,28 +14,27 @@ describe Source::ShellProfileConverger do
         end
 
         it "should append source directives for unsourced files" do
-            Tempfile.open("abc") do |file|
-                converger = Source::ShellProfileConverger.new(file)
-                
-                converger.ensure_source_directives_for(foo, bar)
+            file = Tempfile.create
 
-                expect(file.readlines(chomp: true)).to include(". #{foo}", ". #{bar}")
-            end
+            converger = Source::ShellProfileConverger.new(file.path)
+            
+            converger.ensure_source_directives_for(foo, bar)
+
+            expect(file.readlines(chomp: true)).to include(". #{foo}", ". #{bar}")
         end
 
         it "should do nothing when all files are sourced" do
-            Tempfile.open("def") do |file|
-                file.write <<~EOS
-                . #{foo}
-                . #{bar}
-                EOS
-                file.rewind
+            file = Tempfile.create
+            file.write <<~EOS
+            . #{foo}
+            . #{bar}
+            EOS
+            file.rewind
 
-                converger = Source::ShellProfileConverger.new(file)
-                converger.ensure_source_directives_for(foo, bar)        
-                
-                expect(file.readlines(chomp: true)).to include(". #{foo}", ". #{bar}")
-            end
+            converger = Source::ShellProfileConverger.new(file.path)
+            converger.ensure_source_directives_for(foo, bar)        
+            
+            expect(file.readlines(chomp: true)).to include(". #{foo}", ". #{bar}")
         end
     end
 end

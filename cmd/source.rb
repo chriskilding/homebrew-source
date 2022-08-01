@@ -42,7 +42,7 @@ module Homebrew
         shell_profile_path = File.expand_path(shell_profile)
 
         converger = Source::ShellProfileConverger.new shell_profile_path
-        converger.ensure_source_directives_for files_to_source
+        converger.ensure_source_directives_for *files_to_source
 
         puts "...done."
     end
