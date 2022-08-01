@@ -1,6 +1,6 @@
 # `brew source <formula>`
 
-Automatic management of `source <formula>.sh` directives for shell function formulae.
+Automatic management of `source <formula>` or `. <formula>` directives for shell function formulae.
 
 ## Installation
 
@@ -10,9 +10,24 @@ brew tap chriskilding/source
 
 ## Usage
 
-Say you have a Brew formula `<foo>` that installs shell functions to `/usr/local/share/zsh/site-functions/<foo>`. You want to install it, and ensure its functions are `source`d in your shell profile.
+Say you have a Brew formula `<foo>` that installs shell functions to `/usr/local/share/zsh/site-functions/<foo>`:
 
-To install and source the formula, you need simply run:
+```ruby
+class Foo < Formula
+    desc "An example formula"
+
+    def install
+        # Not real - this is one possible way that formulae *could* declare functions to be sourced
+        zsh_function.install "foo", { source: true }
+    end
+
+    test do
+        system "foo", "-h"
+    end
+end
+```
+
+To install the formula, and ensure its functions are `source`d in your shell profile, you need simply run:
 
 ```
 $ brew install <foo>
@@ -24,7 +39,7 @@ Sourcing the shell functions from '<foo>' in your ~/.zshrc...
 ...done.
 ```
 
-And Brew will take care of adding the `source` directive to your shell profile automatically.
+And Brew will take care of adding the `source` directive(s) to your shell profile automatically.
 
 If you've already `source`d the functions, Brew won't touch your configuration:
 
@@ -39,7 +54,7 @@ Sourcing the shell functions from '<foo>' in your ~/.zshrc...
 Without this Brew extension, you'd have to read the caveats section after installing the formula. The caveats might tell you to add a `source` directive to your shell profile by hand:
 
 ```bash
-source /usr/local/share/zsh/site-functions/<foo>
+. /usr/local/share/zsh/site-functions/<foo>
 ```
 
 And if the formula author forgot to note this in the caveats, you'd have to guess the steps that you needed to take.

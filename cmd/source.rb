@@ -30,16 +30,9 @@ module Homebrew
         formula_name = args.named.first
         formula = Formulary.resolve(formula_name)
 
-        puts formula.path
-
         puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
-        # FIXME read from the formula
-        puts "foo: #{formula.foo}"
-        files_to_source = [
-            "/usr/local/share/zsh/site-functions/#{formula.name}",
-            "/usr/local/share/zsh/site-functions/#{formula.name}-foo"
-        ]
+        files_to_source = formula.foo
 
         if files_to_source.empty?
             puts "...this formula does not contain shell functions, so no action was taken."
@@ -70,9 +63,12 @@ module Homebrew
     end
 end
 
-# Patch what we want onto the brew Formula API
+# Patch the API we'd like to have onto brew Formula
 class Formula
     def foo
-        "abc"
+        [
+            "/usr/local/share/zsh/site-functions/#{formula.name}",
+            "/usr/local/share/zsh/site-functions/#{formula.name}-foo"
+        ]
     end
 end
