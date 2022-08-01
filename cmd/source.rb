@@ -32,7 +32,7 @@ module Homebrew
 
         puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
-        files_to_source = formula.foo
+        files_to_source = formula.source_shell_functions
 
         if files_to_source.empty?
             puts "...this formula does not contain shell functions, so no action was taken."
@@ -48,14 +48,11 @@ module Homebrew
     end
 end
 
-# Patch the API we'd like to have onto brew Formula
+# Patch the API we'd like to have onto Formula
 class Formula
     ##
-    # FIXME retrieve real data from the formula
-    def foo
-        [
-            "/usr/local/share/zsh/site-functions/#{name}",
-            "/usr/local/share/zsh/site-functions/#{name}-foo"
-        ]
+    # Real data will be retrieved from formulae that implement this method
+    def source_shell_functions
+        []
     end
 end
