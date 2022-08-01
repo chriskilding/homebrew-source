@@ -35,7 +35,7 @@ module Homebrew
         puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
         # FIXME read from the formula
-        something = formula.foo
+        puts "foo: #{formula.foo}"
         files_to_source = [
             "/usr/local/share/zsh/site-functions/#{formula.name}",
             "/usr/local/share/zsh/site-functions/#{formula.name}-foo"
