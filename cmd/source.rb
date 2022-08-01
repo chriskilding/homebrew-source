@@ -7,13 +7,6 @@ require "formula"
 module Homebrew
     extend T::Sig
 
-    # Patch what we want onto the brew Formula API
-    class Formula
-        def foo
-            "abc"
-        end
-    end
-
     module_function
 
     sig { returns(CLI::Parser) }
@@ -38,7 +31,6 @@ module Homebrew
         formula = Formulary.resolve(formula_name)
 
         puts formula.path
-        puts formula.methods
 
         puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
@@ -75,5 +67,12 @@ module Homebrew
         end
 
         puts "...done."
+    end
+end
+
+# Patch what we want onto the brew Formula API
+class Formula
+    def foo
+        "abc"
     end
 end
