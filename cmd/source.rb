@@ -41,22 +41,8 @@ module Homebrew
 
         shell_profile_path = File.expand_path(shell_profile)
 
-        unsourced_files = []
-
-        File.open(shell_profile_path, 'r') do |file|
-            rc = Source::ShellProfile.new(file)
-            unsourced_files = rc.unsourced_files(*files_to_source)
-        end
-
-        if unsourced_files.empty?
-            puts "...this formula's shell functions are already sourced, so no action was taken."
-            return
-        end
-
-        File.open(shell_profile_path, 'a') do |file|
-            rc = Source::ShellProfile.new(file)
-            rc.add_source_directives(*unsourced_files)
-        end
+        converger = Source::ShellProfileConverger.new shell_profile_path
+        converger.ensure_source_directives_for files_to_source
 
         puts "...done."
     end
@@ -64,6 +50,8 @@ end
 
 # Patch the API we'd like to have onto brew Formula
 class Formula
+    ##
+    # FIXME retrieve real data from the formula
     def foo
         [
             "/usr/local/share/zsh/site-functions/#{name}",

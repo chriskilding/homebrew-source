@@ -41,13 +41,7 @@ Sourcing the shell functions from '<foo>' in your ~/.zshrc...
 
 And Brew will take care of adding the `source` directive(s) to your shell profile automatically.
 
-If you've already `source`d the functions, Brew won't touch your configuration:
-
-```
-$ brew source <foo>
-Sourcing the shell functions from '<foo>' in your ~/.zshrc...
-...this formula's shell functions are already sourced, so no action was taken.
-```
+If you've already `source`d the functions, Brew won't touch your configuration.
 
 ### Without `brew source`
 

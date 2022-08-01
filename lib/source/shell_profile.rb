@@ -12,7 +12,8 @@ module Source
         end
 
         ##
-        # Determine whether str contains a 'source' directive for the specified shell functions script
+        # Determines whether str contains a 'source' directive for the specified shell functions script.
+        # Ignores 'source' directives that are commented out.
         def self.includes_source_directive?(str, shell_functions_script)
             str =~ /^[^#]*(source|\.)\s+#{shell_functions_script}(#.*|\s.*|\b)$/
         end
