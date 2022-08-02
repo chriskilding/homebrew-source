@@ -10,15 +10,20 @@ brew tap chriskilding/source
 
 ## Usage
 
-Say you have a Brew formula `<foo>` that installs shell functions to `/usr/local/share/zsh/site-functions/<foo>`:
+Say you have a Brew formula `<foo>` that installs sourceable shell functions:
 
 ```ruby
 class Foo < Formula
     desc "An example formula"
 
     def install
-        # Not real - this is one possible way that formulae *could* declare functions to be sourced
-        zsh_function.install "foo", { source: true }
+        libexec.install "foo"
+        zsh_function.install "bar"
+        fish_function.install "baz"
+    end
+
+    shell do
+        source libexec("foo")
     end
 
     test do
