@@ -78,7 +78,7 @@ bundle exec rspec
 
 These are the DSL extensions we will need to add to Homebrew (work in progress).
 
-Create `shell.rb`:
+Create `shell_.rb` (this is to get round the fact that Ruby core has a module called `shell`):
 
 ```ruby
 # typed: true
@@ -97,26 +97,38 @@ module Homebrew
         def initialize(formula, &block)
             @formula = formula
             @shell_block = block
-            @sourceable_files = []
+            @files_to_source = []
         end
 
         sig { params(path: T.any(String, Pathname)).returns(T.nilable(Array)) }
         def source(path)
             case T.unsafe(path)
             when nil
-                @sourceable_files
+                @files_to_source
             when String, Pathname
-                @sourceable_files.append path
+                @files_to_source.append path
             else
                 raise TypeError, "Shell#source expects a String"
             end
         end
+
+        def sourceable_files
+            instance_eval(&@shell_block)
+
+            @files_to_source
+        end
     end
+end
 ```
 
 Append to `formula.rb`:
 
 ```ruby
+require "shell_"
+
+
+
+
 # Is a shell specification defined for the software?
 # @!method shell?
 # @see .shell?
@@ -159,4 +171,10 @@ def shell(&block)
 
     @shell_block = block
 end
+```
+
+Append to `formula.rbi`:
+
+```ruby
+def shell?; end
 ```

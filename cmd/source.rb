@@ -32,12 +32,8 @@ module Homebrew
 
         puts "Sourcing the shell functions from '#{formula}' in your #{shell_profile}..."
 
-        puts "formula shell: #{formula.shell}"
-
         files_to_source = formula.shell.sourceable_files
 
-        puts "files to source: #{files_to_source}"
-        
         if files_to_source.empty?
             puts "...this formula does not contain shell functions, so no action was taken."
             return
